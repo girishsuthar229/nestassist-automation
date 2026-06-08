@@ -1,16 +1,13 @@
-@Library('playwright-shared-library') _
+@Library('jenkins-shared-library') _
 
 pipeline {
-
     agent any
 
     stages {
 
         stage('Checkout') {
             steps {
-                checkoutCode(
-                    'https://github.com/company/playwright-demo.git'
-                )
+                checkoutCode('https://github.com/girishsuthar229/automation-with-playwright.git')
             }
         }
 
@@ -31,7 +28,5 @@ pipeline {
                 publishReport()
             }
         }
-
     }
-
 }
