@@ -1,0 +1,30 @@
+{
+  "name": "nestassist_automation",
+  "version": "1.0.0",
+  "description": "Playwright automation framework for NetsAssiste application – UI & API testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:login": "playwright test tests/login.spec.ts",
+    "test:profile": "playwright test tests/profile.spec.ts",
+    "test:home": "playwright test tests/home.spec.ts",
+    "test:forgot": "playwright test tests/forgotPassword.spec.ts",
+    "test:services": "playwright test tests/services.spec.ts",
+    "test:admin": "playwright test tests/adminDashboard.spec.ts",
+    "test:partner": "playwright test tests/partnerDashboard.spec.ts",
+    "test:api": "playwright test tests/api/",
+    "report": "playwright show-report",
+    "allure:serve": "allure serve allure-results",
+    "allure:generate": "allure generate allure-results --clean -o allure-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1",
+    "@types/node": "^20.10.0",
+    "allure-playwright": "^3.8.0",
+    "dotenv": "^16.4.5",
+    "typescript": "^5.3.3"
+  }
+}
