@@ -7,7 +7,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                checkoutCode('https://github.com/girishsuthar229/automation-with-playwright.git')
+                checkoutCode('https://github.com/girishsuthar229/nestassist-automation.git')
             }
         }
 
