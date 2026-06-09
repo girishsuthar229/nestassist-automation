@@ -51,7 +51,7 @@ pipeline {
 
         stage('Publish Report') {
             steps {
-                publishReport()
+                publishAllureReport()
             }
         }
     }

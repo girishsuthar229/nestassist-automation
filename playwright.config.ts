@@ -15,15 +15,6 @@ export default defineConfig({
     process.env.CI === "true" ? 1 : Number(process.env.PW_WORKERS) || undefined,
   /* Reporter configuration */
   reporter: [
-    [
-      process.env.REPORTER || "html",
-      {
-        outputFolder: "playwright-report",
-        open: "never",
-        embedScreenshots: true,
-        embedVideos: true,
-      },
-    ],
     ["allure-playwright"],
     ["list"], // console output for CI
   ],
