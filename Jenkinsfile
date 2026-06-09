@@ -53,7 +53,8 @@ pipeline {
 
         stage('Publish Report') {
             steps {
-                publishAllureReport()
+                // publishAllureReport()   //this for the Allure Report
+                publishHTMLReport() 
             }
         }
 
@@ -62,7 +63,8 @@ pipeline {
                 publishToGitHubPages(
                     repoUrl: 'https://github.com/girishsuthar229/nestassist-automation.git',
                     branch: 'gh-pages',
-                    reportDir: 'allure-report',
+                    // reportDir: 'allure-report',
+                    reportDir: 'playwright-report',
                     gitUser: 'Jenkins CI',
                     gitEmail: 'jenkins@gmail.com',
                     credentialsId: 'github-token',
