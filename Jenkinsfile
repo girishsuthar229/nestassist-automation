@@ -72,27 +72,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            emailext (
-                to: 'nikkbhai9090@gmail.com',
-                subject: "Playwright Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                body: """
-                    Hi,
-
-                    Build Status: ${currentBuild.currentResult}
-
-                    Jenkins Report:
-                    http://localhost:8080/job/playwright-ci/${env.BUILD_NUMBER}/allure/
-
-                    GitHub Pages Report:
-                    https://girishsuthar229.github.io/nestassist-automation/
-
-                    Thanks,
-                    Jenkins
-                """
-            )
-        }
-    }
 }
