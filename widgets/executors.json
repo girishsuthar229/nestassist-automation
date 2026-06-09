@@ -1,1 +1,1 @@
-[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":22,"buildName":"playwright-ci #22","buildUrl":"http://localhost:8080/job/playwright-ci/22/display/redirect","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/playwright-ci/22/allure"}]
+[{"name":"Jenkins","type":"jenkins","url":"http://localhost:8080/","buildOrder":23,"buildName":"playwright-ci #23","buildUrl":"http://localhost:8080/job/playwright-ci/23/display/redirect","reportName":"AllureReport","reportUrl":"http://localhost:8080/job/playwright-ci/23/allure"}]
