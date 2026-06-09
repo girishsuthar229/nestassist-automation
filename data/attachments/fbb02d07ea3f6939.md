@@ -1,0 +1,95 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: services.spec.ts >> Services Page >> Services section shows at least one service card
+- Location: tests\services.spec.ts:46:7
+
+# Error details
+
+```
+Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+Call log:
+  - navigating to "/services", waiting until "load"
+
+```
+
+# Test source
+
+```ts
+  1  | /**
+  2  |  * ServicesPage – Page Object Model
+  3  |  * Covers the public services listing page (/services).
+  4  |  */
+  5  | import { Page, Locator, expect } from '@playwright/test';
+  6  | import { ROUTES } from '../constants/routes';
+  7  | 
+  8  | export class ServicesPage {
+  9  |   readonly page: Page;
+  10 | 
+  11 |   readonly pageHeading: Locator;
+  12 |   readonly serviceCards: Locator;
+  13 |   readonly categoryFilters: Locator;
+  14 |   readonly searchInput: Locator;
+  15 |   readonly loadingSpinner: Locator;
+  16 |   readonly emptyState: Locator;
+  17 | 
+  18 |   constructor(page: Page) {
+  19 |     this.page = page;
+  20 | 
+  21 |     this.pageHeading = page.locator('h1, h2').first();
+  22 |     this.serviceCards = page.locator('button.group, [class*="card"], [class*="Card"], [class*="service-item"]');
+  23 |     this.categoryFilters = page.locator('button[class*="filter"], [class*="category-btn"], [class*="tab"]');
+  24 |     this.searchInput = page.locator('input[placeholder*="search" i]').first();
+  25 |     this.loadingSpinner = page.locator('[class*="spinner"], [class*="loading"], [role="progressbar"]').first();
+  26 |     this.emptyState = page.locator('[class*="empty"], p:has-text("no services"), p:has-text("No results")').first();
+  27 |   }
+  28 | 
+  29 |   async navigate(): Promise<void> {
+> 30 |     await this.page.goto(ROUTES.SERVICES);
+     |                     ^ Error: page.goto: Protocol error (Page.navigate): Cannot navigate to invalid URL
+  31 |     await this.page.waitForLoadState('domcontentloaded');
+  32 |   }
+  33 | 
+  34 |   async waitForServicesToLoad(): Promise<void> {
+  35 |     // Wait for either cards (buttons in the modular page) to appear or empty state
+  36 |     await this.page.waitForFunction(() =>
+  37 |       document.querySelectorAll('button.group').length > 0 ||
+  38 |       document.querySelectorAll('[class*="card"]').length > 0 ||
+  39 |       document.body.innerText.includes("No services found")
+  40 |     , { timeout: 10000 }).catch(() => {});
+  41 |   }
+  42 | 
+  43 |   async assertServiceCardsVisible(minCount = 1): Promise<void> {
+  44 |     await expect(this.serviceCards.first()).toBeVisible({ timeout: 8000 });
+  45 |     const count = await this.serviceCards.count();
+  46 |     expect(count).toBeGreaterThanOrEqual(minCount);
+  47 |   }
+  48 | 
+  49 |   async clickFirstService(): Promise<void> {
+  50 |     await this.serviceCards.first().click();
+  51 |   }
+  52 | 
+  53 |   async clickServiceByName(name: string): Promise<void> {
+  54 |     await this.serviceCards.filter({ hasText: name }).first().click();
+  55 |   }
+  56 | 
+  57 |   async filterByCategory(categoryName: string): Promise<void> {
+  58 |     await this.categoryFilters.filter({ hasText: categoryName }).first().click();
+  59 |   }
+  60 | 
+  61 |   async searchService(query: string): Promise<void> {
+  62 |     await this.searchInput.fill(query);
+  63 |     await this.page.keyboard.press('Enter');
+  64 |   }
+  65 | 
+  66 |   async assertHeadingVisible(): Promise<void> {
+  67 |     await expect(this.pageHeading).toBeVisible();
+  68 |   }
+  69 | }
+  70 | 
+```
