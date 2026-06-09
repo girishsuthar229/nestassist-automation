@@ -13,6 +13,7 @@ pipeline {
         PARTNER_PASSWORD  = credentials('partner_password')
         PW_RETRIES        = credentials('pw_retries')
         PW_WORKERS        = credentials('pw_workers')
+        TO_SEND_EMAIL     = credentials('to_send_email')
     }
 
     stages {
@@ -41,7 +42,8 @@ pipeline {
                         "PARTNER_PASSWORD=${env.PARTNER_PASSWORD}",
                         "PW_RETRIES=${env.PW_RETRIES}",
                         "PW_WORKERS=${env.PW_WORKERS}",
-                        "REPORTER=${env.REPORTER}"
+                        "REPORTER=${env.REPORTER}",
+                        "TO_SEND_EMAIL=${env.TO_SEND_EMAIL}",
                     ]) {
                         runPlaywrightTests()
                     }
@@ -53,6 +55,44 @@ pipeline {
             steps {
                 publishAllureReport()
             }
+        }
+
+        stage('Publish to GitHub Pages') {
+            steps {
+                publishToGitHubPages(
+                    repoUrl: 'https://github.com/girishsuthar229/nestassist-automation.git',
+                    branch: 'gh-pages',
+                    reportDir: 'allure-report',
+                    gitUser: 'Jenkins CI',
+                    gitEmail: 'jenkins@gmail.com',
+                    credentialsId: 'github-token',
+                    publicUrl: 'https://girishsuthar229.github.io/nestassist-automation/',
+                    emailTo: "${env.TO_SEND_EMAIL}"
+                )
+            }
+        }
+    }
+
+    post {
+        always {
+            emailext (
+                to: 'nikkbhai9090@gmail.com',
+                subject: "Playwright Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
+                body: """
+                    Hi,
+
+                    Build Status: ${currentBuild.currentResult}
+
+                    Jenkins Report:
+                    http://localhost:8080/job/playwright-ci/${env.BUILD_NUMBER}/allure/
+
+                    GitHub Pages Report:
+                    https://girishsuthar229.github.io/nestassist-automation/
+
+                    Thanks,
+                    Jenkins
+                """
+            )
         }
     }
 }
